@@ -5,10 +5,16 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
+import lombok.AccessLevel;
+import lombok.Data;
+import lombok.Setter;
+
 @Entity
+@Data
 public class Commit {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
+    @Setter(AccessLevel.NONE)
     private Integer commit_id;
     private Long date_posted;
     private Long start_hour;
@@ -21,6 +27,10 @@ public class Commit {
         this.end_hour = eh;
     }
 
+    @Override
+    public int hashCode(){
+        return this.commit_id;
+    }
     @Override
     public boolean equals(Object obj){
         if(obj == null) return false;

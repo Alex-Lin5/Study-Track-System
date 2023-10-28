@@ -30,4 +30,5 @@ public class SystemController {
         log.info("Handling get all commits request." + commits);
         return ResponseEntity.status(HttpStatus.OK).body(commits);
     }
+    
 }
