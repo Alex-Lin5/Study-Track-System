@@ -19,6 +19,7 @@ public class Commit {
     private Long date_posted;
     private Long start_hour;
     private Long end_hour;
+    
     public Commit(){}
     public Commit(Integer id, Long dp, Long sh, Long eh){
         this.commit_id = id;
