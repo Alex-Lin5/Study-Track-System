@@ -1,9 +1,11 @@
 package com.example.Spring.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;
@@ -17,8 +19,12 @@ public class Material {
     private Integer material_id;
     private String name;
     private String description;
+    @Column(columnDefinition = "varchar(255) default 'undefined'")
     private String url;
+    @Column(columnDefinition = "varchar(255) default 'unknown'")
     private String note;
+    // @OneToOne(mappedBy = "material")
+    // private Track track;
 
     public Material(){}
     public Material(Integer id, String name, String des, String url, String note){
@@ -38,8 +44,6 @@ public class Material {
         this.material_id = id;
         this.name = name;
         this.description = des;
-        this.url = "Unknown";
-        this.note = "None";
     }
 
 
@@ -84,7 +88,7 @@ public class Material {
     @Override
     public String toString(){
         return String.format(
-            "Material {material_id=%d, name=%s, url=%s, description=%s}", 
+            "Material {material_id=%d, name=%s, url=%s, description=%s}\n", 
             material_id, name, url, description);
     }
 

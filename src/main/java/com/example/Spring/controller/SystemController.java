@@ -10,8 +10,10 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.example.Spring.entity.Commit;
 import com.example.Spring.entity.Material;
+import com.example.Spring.entity.Track;
 import com.example.Spring.service.CommitService;
 import com.example.Spring.service.MaterialService;
+import com.example.Spring.service.TrackService;
 
 import lombok.extern.log4j.Log4j2;
 
@@ -20,14 +22,20 @@ import lombok.extern.log4j.Log4j2;
 public class SystemController {
     CommitService commitService;
     MaterialService materialService;
+    TrackService trackService;
     
     @Autowired
-    public SystemController(CommitService cs, MaterialService ms){
+    public SystemController(CommitService cs, MaterialService ms, TrackService ts){
         log.info("Controller initialized.");
         this.commitService = cs;
         this.materialService = ms;
+        this.trackService = ts;
     }
-
+    @GetMapping(value = "/")
+    public ResponseEntity<String> getHome(){
+        log.info("Handling home page get request.");
+        return ResponseEntity.status(HttpStatus.OK).body("Home");
+    }
     @GetMapping(value = "/commits")
     public ResponseEntity<List<Commit>> getAllCommits(){
         List<Commit> commits = commitService.getAllCommits();
@@ -39,6 +47,12 @@ public class SystemController {
         List<Material> materials = materialService.getAllMaterials();
         log.info("Handling get all materials request." + materials);
         return ResponseEntity.status(HttpStatus.OK).body(materials);
+    }
+    @GetMapping(value = "/tracks")
+    public ResponseEntity<List<Track>> getAlltracks(){
+        List<Track> tracks = trackService.getAllTracks();
+        log.info("Handling get all tracks request." + tracks);
+        return ResponseEntity.status(HttpStatus.OK).body(tracks);
     }
 
 }

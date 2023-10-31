@@ -1,10 +1,12 @@
 package com.example.Spring.entity;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-
+import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;
@@ -16,10 +18,16 @@ public class Commit {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Setter(AccessLevel.NONE)
     private Integer commit_id;
+    @Column(columnDefinition = "varchar(255) default 'None'")
+    private String message;
     private Long date_posted;
     private Long start_hour;
     private Long end_hour;
-    
+    @Column(columnDefinition = "integer default 10")
+    private Integer point;
+    // @ManyToOne(fetch = FetchType.LAZY)
+    // private Track track;
+
     public Commit(){}
     public Commit(Integer id, Long dp, Long sh, Long eh){
         this.commit_id = id;
@@ -43,28 +51,13 @@ public class Commit {
         } else if(!this.commit_id.equals(other.commit_id)){
             return false;
         }
-        if(this.date_posted == null){
-            if(other.date_posted != null) return false;            
-        } else if(!this.date_posted.equals(other.date_posted)){
-            return false;
-        }
-        if(this.start_hour == null){
-            if(other.start_hour != null) return false;            
-        } else if(!this.start_hour.equals(other.start_hour)){
-            return false;
-        }
-        if(this.end_hour == null){
-            if(other.end_hour != null) return false;            
-        } else if(!this.end_hour.equals(other.end_hour)){
-            return false;
-        }
         return true;
     }
     
     @Override
     public String toString(){
         return String.format(
-            "Commit {commit_id=%d, date_posted=%d, start_hour=%d, end_hour=%d}", 
-            commit_id, date_posted, start_hour, end_hour);
+            "Commit {commit_id=%d, message=%s date_posted=%d, start_hour=%d, end_hour=%d}\n", 
+            commit_id, message, date_posted, start_hour, end_hour);
     }
 }
