@@ -1,4 +1,4 @@
-package com.example.Spring;
+package com.example.Spring.Materials;
 
 import java.io.IOException;
 import java.net.URI;
@@ -15,6 +15,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ApplicationContext;
 
+import com.example.Spring.StudyTrackSystemApplication;
 import com.example.Spring.entity.Material;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;

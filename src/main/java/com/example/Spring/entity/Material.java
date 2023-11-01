@@ -5,7 +5,6 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;
@@ -20,13 +19,15 @@ public class Material {
     private String name;
     private String description;
     @Column(columnDefinition = "varchar(255) default 'undefined'")
-    private String url;
+    private String url = "undefined";
     @Column(columnDefinition = "varchar(255) default 'unknown'")
-    private String note;
-    // @OneToOne(mappedBy = "material")
-    // private Track track;
+    private String note = "unknown";
 
     public Material(){}
+    public Material(Integer id, String name){
+        this.material_id = id;
+        this.name = name;
+    }
     public Material(Integer id, String name, String des, String url, String note){
         this.material_id = id;
         this.name = name;
@@ -88,8 +89,8 @@ public class Material {
     @Override
     public String toString(){
         return String.format(
-            "Material {material_id=%d, name=%s, url=%s, description=%s}\n", 
-            material_id, name, url, description);
+            "Material {material_id=%d, name=%s, url=%s, description=%s, note=%s}\n", 
+            material_id, name, url, description, note);
     }
 
 }

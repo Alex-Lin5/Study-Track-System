@@ -19,4 +19,8 @@ public class CommitService {
         List<Commit> commits = commitRepository.findAll();
         return commits;
     }
+    public List<Commit> getCommitsInTrack(Integer track_id){
+        List<Commit> commits = commitRepository.findAllInTrack(track_id);
+        return commits;
+    }
 }

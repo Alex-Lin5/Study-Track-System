@@ -6,8 +6,13 @@ insert into Material (material_id, name, description) values (10, 'spring', 'fra
 insert into Material (material_id, name, description) values (20, 'leetcode', 'coding chalanges');
 insert into Material (material_id, name, description) values (30, 'git', 'version control');
 
-insert into Track (track_id, material, progress) values (10, 30, 5);
-insert into Track (track_id, material, progress) values (11, 10, 5);
-insert into Track_Commits values (0, 10);
-insert into Track_Commits values (1, 10);
-insert into Track_Commits values (2, 11);
+insert into Track (track_id, material_from, progress) values (10, 30, 5);
+insert into Track (track_id, material_from, progress) values (11, 10, 5);
+
+update Commit set track_from = 10 where commit_id = 0;
+update Commit set track_from = 10 where commit_id = 1;
+update Commit set track_from = 11 where commit_id = 2;
+
+-- insert into Track_Commits values (0, 10);
+-- insert into Track_Commits values (1, 10);
+-- insert into Track_Commits values (2, 11);

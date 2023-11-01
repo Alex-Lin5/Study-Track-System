@@ -1,0 +1,63 @@
+package com.example.Spring.Tracks;
+
+import java.io.IOException;
+import java.net.URI;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.SpringApplication;
+import org.springframework.context.ApplicationContext;
+
+import com.example.Spring.StudyTrackSystemApplication;
+import com.example.Spring.entity.Material;
+import com.example.Spring.entity.Track;
+import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+public class RetrieveAllTracksTest {
+    ApplicationContext app;
+    HttpClient webClient;
+    ObjectMapper objectMapper;
+    String host = "http://localhost:8080";
+
+    @BeforeEach
+    public void setup() throws InterruptedException{
+        webClient = HttpClient.newHttpClient();
+        objectMapper = new ObjectMapper();
+        String[] args = new String[]{};
+        app = SpringApplication.run(StudyTrackSystemApplication.class, args);
+        Thread.sleep(500);
+    }
+    @AfterEach
+    public void teardown() throws InterruptedException{
+        Thread.sleep(500);
+        SpringApplication.exit(app);
+    }
+    @Test
+    public void getAllTracksAvailable() throws IOException, InterruptedException{
+        HttpRequest request = HttpRequest.newBuilder()
+            .uri(URI.create(host + "/tracks"))
+            .build();
+        HttpResponse<String> response = webClient.send(request, HttpResponse.BodyHandlers.ofString());
+        int status = response.statusCode();
+        Assertions.assertEquals(200, status, "Expected status code 200, actual code is " + status);
+        List<Track> result = objectMapper.readValue(response.body().toString(), new TypeReference<List<Track>>(){});
+        List<Material> materials = new ArrayList<>();
+        materials.add(new Material(30, "git"));
+        materials.add(new Material(10, "spring"));
+        List<Track> expected = new ArrayList<>();
+        expected.add(new Track(10, materials.get(0), 5));
+        expected.add(new Track(11, materials.get(1), 5));
+
+        Assertions.assertEquals(2, result.size());
+        Assertions.assertEquals(expected, result, "Expected="+expected + ", Result="+result);
+    }
+    
+}

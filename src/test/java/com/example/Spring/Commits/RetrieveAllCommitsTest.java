@@ -1,4 +1,4 @@
-package com.example.Spring;
+package com.example.Spring.Commits;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -14,6 +14,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ApplicationContext;
 
+import com.example.Spring.StudyTrackSystemApplication;
 import com.example.Spring.entity.Commit;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;

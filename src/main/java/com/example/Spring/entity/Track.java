@@ -9,9 +9,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.OneToOne;
-import jakarta.persistence.PrimaryKeyJoinColumn;
 import lombok.AccessLevel;
 import lombok.Data;
 import lombok.Setter;
@@ -23,23 +21,22 @@ public class Track {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Setter(AccessLevel.NONE)
     private Integer track_id;
-    @OneToMany(cascade = CascadeType.ALL)
+    // @OneToMany(cascade = CascadeType.ALL)
     // @JoinColumn(name = "commit_id")
-    // @Column(name = "commits", columnDefinition = "integer")
-    private List<Commit> commits;
+    // private List<Commit> commits;
     @OneToOne(cascade = CascadeType.ALL)
-    // @PrimaryKeyJoinColumn
-    @JoinColumn(name = "material", referencedColumnName = "material_id")
-    private Material material;
+    @JoinColumn(name = "material_from")
+    private Material material_from;
     @Column(columnDefinition = "integer default 0")
     private Integer progress;
 
     public Track(){}
-    public Track(Integer id, List<Commit> commits, Material material){
+    public Track(Integer id, Material material, Integer progress){
         this.track_id = id;
-        this.commits = commits;
-        this.material = material;
+        this.material_from = material;
+        this.progress = progress;
     }
+
     @Override
     public int hashCode(){
         return this.track_id;
@@ -55,6 +52,16 @@ public class Track {
         } else if(!this.track_id.equals(other.track_id)){
             return false;
         }
+        if(this.progress == null){
+            if(other.progress != null) return false;            
+        } else if(!this.progress.equals(other.progress)){
+            return false;
+        }
+        if(this.material_from == null){
+            if(other.material_from != null) return false;            
+        } else if(!this.material_from.getMaterial_id().equals(other.material_from.getMaterial_id())){
+            return false;
+        }
         return true;
     }
 
@@ -62,7 +69,7 @@ public class Track {
     public String toString(){
         return String.format(
             "Track {track_id=%d, material=%s, progress=%d}\n", 
-            track_id, material.getName(), progress);
+            track_id, material_from.getName(), progress);
     }
 
 }
