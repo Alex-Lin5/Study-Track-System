@@ -13,5 +13,4 @@ import com.example.Spring.entity.Material;
 public interface MaterialRepository extends JpaRepository<Material, Integer>{
     @Query("FROM Material WHERE name = :namevar")
     Optional<Material> findByName(@Param("namevar") String name);
-    
 }

@@ -78,6 +78,10 @@ public class Commit {
     
     @Override
     public String toString(){
+        if(from != null)
+            return String.format(
+            "Commit {commit_id=%d, message=%s date_posted=%d, start_hour=%d, end_hour=%d, from=%d}\n", 
+            commit_id, message, date_posted, start_hour, end_hour, from.getTrack_id());
         return String.format(
             "Commit {commit_id=%d, message=%s date_posted=%d, start_hour=%d, end_hour=%d}\n", 
             commit_id, message, date_posted, start_hour, end_hour);

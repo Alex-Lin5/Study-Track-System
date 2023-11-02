@@ -24,6 +24,14 @@ public class Material {
     private String note = "unknown";
 
     public Material(){}
+    public Material(Material m, boolean withId){
+        if(withId) this.material_id = m.material_id;
+        else this.material_id = null;
+        this.name = m.name;
+        this.description = m.description;
+        this.url = m.url;
+        this.note = m.note;
+    }
     public Material(Integer id, String name){
         this.material_id = id;
         this.name = name;
