@@ -33,11 +33,24 @@ public class Commit {
     private Track from;
 
     public Commit(){}
+    public Commit(Commit c){
+        this.commit_id = c.getCommit_id();
+        this.date_posted = c.getDate_posted();
+        this.start_hour = c.getStart_hour();
+        this.end_hour = c.getEnd_hour();
+    }
     public Commit(Integer id, Long dp, Long sh, Long eh){
         this.commit_id = id;
         this.date_posted = dp;
         this.start_hour = sh;
         this.end_hour = eh;
+    }
+    public Commit(Integer id, Long dp, Long sh, Long eh, Track from){
+        this.commit_id = id;
+        this.date_posted = dp;
+        this.start_hour = sh;
+        this.end_hour = eh;
+        this.from = from;
     }
     // public Long getHours(){
     //     return end_hour-start_hour;

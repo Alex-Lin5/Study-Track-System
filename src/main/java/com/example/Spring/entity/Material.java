@@ -24,9 +24,8 @@ public class Material {
     private String note = "unknown";
 
     public Material(){}
-    public Material(Material m, boolean withId){
-        if(withId) this.material_id = m.material_id;
-        else this.material_id = null;
+    public Material(Material m){
+        this.material_id = m.material_id;
         this.name = m.name;
         this.description = m.description;
         this.url = m.url;

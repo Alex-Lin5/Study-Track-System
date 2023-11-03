@@ -22,13 +22,13 @@ public class MaterialService {
     }
     public Material postMaterial(Material m){
         Optional<Material> DuplicateName = materialRepository.findByName(m.getName());
-        Optional<Material> DuplicateId = materialRepository.findById(m.getMaterial_id());
-        if(DuplicateId.isPresent()){
-            Material material = new Material(m, false);
-            return material;
-        }
+        // Optional<Material> DuplicateId = materialRepository.findById(m.getMaterial_id());
+        // if(DuplicateId.isPresent()){
+        //     Material material = new Material(m);
+        //     return material;
+        // }
         if(DuplicateName.isPresent()){
-            Material material = new Material(m, true);
+            Material material = new Material(m);
             material.setName(null);
             return material;
         }

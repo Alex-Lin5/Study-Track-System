@@ -31,6 +31,7 @@ public class Track {
     private Integer progress;
 
     public Track(){}
+    public Track(Integer id) {this.track_id = id;}
     public Track(Integer id, Material material, Integer progress){
         this.track_id = id;
         this.material_from = material;

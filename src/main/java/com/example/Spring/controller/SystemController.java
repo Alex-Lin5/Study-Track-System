@@ -1,7 +1,6 @@
 package com.example.Spring.controller;
 
 import java.util.List;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -52,14 +51,29 @@ public class SystemController {
         log.info("Handling get commits in track request." + commits + ", track_id=" + track_id);
         return ResponseEntity.status(HttpStatus.OK).body(commits);
     }
-    // @PostMapping(value = "/materials")
-    // public ResponseEntity<Material> postMaterial(@RequestBody Material m){
-    //     Optional<Material> optionalMaterial = materialService.postMaterial(m);
-    //     if(optionalMaterial.isEmpty()){
-    //         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-    //     }
-    //     return ResponseEntity.status(HttpStatus.OK).body(optionalMaterial.get());
-    // }
+    @PostMapping(value = "/commits")
+    public ResponseEntity<Commit> postCommit(@RequestBody Commit c){
+        log.info("Handling post commit request. " + c);
+        if(c == null){
+            log.error("Post commit with empty input.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+        Commit commit = commitService.postCommit(c);
+        if(commit == null){
+            log.error("Post commit with unknown error, "+ c);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+        if(c.getFrom() == null){
+            log.info("Post commit with empty track from input.");
+            return ResponseEntity.status(HttpStatus.OK).body(commit);
+        }
+        else if(commit.getFrom() == null){
+            log.error("Post commit with unknown track from, "+ c.getFrom().getTrack_id());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+        log.info("Post commit with valid track from input.");
+        return ResponseEntity.status(HttpStatus.OK).body(commit);
+    }
     @GetMapping(value = "/materials")
     public ResponseEntity<List<Material>> getAllmaterials(){
         List<Material> materials = materialService.getAllMaterials();
@@ -78,10 +92,10 @@ public class SystemController {
             log.error("Post material with unknown error, "+ m);
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
-        if(material.getMaterial_id() == null){
-            log.error("Post material with duplicate id attribute, "+ m.getMaterial_id());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
-        }
+        // if(material.getMaterial_id() == null){
+        //     log.error("Post material with duplicate id attribute, "+ m.getMaterial_id());
+        //     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        // }
         if(material.getName() == null){
             log.error("Post material with duplicate name attribute, "+ m.getName());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);

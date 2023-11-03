@@ -47,9 +47,9 @@ public class RetrieveAllCommitsTest {
         int status = response.statusCode();
         Assertions.assertEquals(200, status, "Expected status code 200, actual code is " + status);
         List<Commit> expected = new ArrayList<>();
-        expected.add(new Commit(0, 1669947792L, 1669947798L, 1669947799L));
-        expected.add(new Commit(1, 1669947793L, 1669947798L, 1669947799L));        
-        expected.add(new Commit(2, 1669947794L, 1669947798L, 1669947799L));        
+        expected.add(new Commit(50, 1669947792L, 1669947798L, 1669947799L));
+        expected.add(new Commit(51, 1669947793L, 1669947798L, 1669947799L));        
+        expected.add(new Commit(52, 1669947794L, 1669947798L, 1669947799L));        
         List<Commit> result = objectMapper.readValue(response.body().toString(), new TypeReference<List<Commit>>(){});
         Assertions.assertEquals(expected, result, "Expected="+expected + ", Result="+result);
     }
