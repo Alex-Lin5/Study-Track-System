@@ -1,4 +1,4 @@
-package com.example.Spring.Commits;
+package com.example.Spring.Tracks;
 
 import java.io.IOException;
 import java.net.URI;
@@ -14,12 +14,12 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.context.ApplicationContext;
 
 import com.example.Spring.StudyTrackSystemApplication;
-import com.example.Spring.entity.Commit;
+import com.example.Spring.entity.Material;
 import com.example.Spring.entity.Track;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class CreateCommitTest {
+public class CreateTrackTest {
     ApplicationContext app;
     HttpClient webClient;
     ObjectMapper objectMapper;
@@ -39,50 +39,66 @@ public class CreateCommitTest {
         SpringApplication.exit(app);
     }
     @Test
-    public void createCommitWithNullTrackFrom() throws IOException, InterruptedException {
-        String json = "{\"date_posted\": 1769947792, \"start_hour\": 1669947798, \"end_hour\": 1669947799}";
+    public void postTrackSuccessful() throws IOException, InterruptedException{
+        String json = "{\"material_from\": 20, \"progress\": 10}";
         HttpRequest request = HttpRequest.newBuilder()
-            .uri(URI.create(host + "/commits"))
+            .uri(URI.create(host + "/tracks"))
             .POST(HttpRequest.BodyPublishers.ofString(json))
             .header("Content-Type", "application/json")
             .build();
         HttpResponse<String> response = webClient.send(request, HttpResponse.BodyHandlers.ofString());
         int status = response.statusCode();
         Assertions.assertEquals(200, status, "Expected status code 200, actual code is " + status);
-        Commit expected = new Commit(1, 1769947792L, 1669947798L, 1669947799L);
-        Commit result = objectMapper.readValue(response.body().toString(), new TypeReference<Commit>(){});
+        Track result = objectMapper.readValue(response.body().toString(), new TypeReference<Track>(){});
+        Material material = new Material(20, "leetcode");
+        Track expected = new Track(1, material, 10);
         Assertions.assertEquals(expected, result, "Expected="+expected + ", Result="+result);
     }
     @Test
-    public void createCommitWithInvalidTrackFrom() throws IOException, InterruptedException {
-        String json = "{\"date_posted\": 1769947792, \"start_hour\": 1669947798, \"end_hour\": 1669947799, \"from\": 200}";
+    public void postTrackWithEmptyMaterial() throws IOException, InterruptedException{
+        String json = "{\"progress\": 10}";
         HttpRequest request = HttpRequest.newBuilder()
-            .uri(URI.create(host + "/commits"))
+            .uri(URI.create(host + "/tracks"))
             .POST(HttpRequest.BodyPublishers.ofString(json))
             .header("Content-Type", "application/json")
             .build();
         HttpResponse<String> response = webClient.send(request, HttpResponse.BodyHandlers.ofString());
         int status = response.statusCode();
-        Assertions.assertEquals(400, status, "Expected status code 200, actual code is " + status);
-        String expected = "";
+        Assertions.assertEquals(400, status, "Expected status code 400, actual code is " + status);
         String result = response.body();
+        String expected = "";
         Assertions.assertEquals(expected, result, "Expected="+expected + ", Result="+result);
     }
     @Test
-    public void createCommitWithValidTrackFrom() throws IOException, InterruptedException {
-        String json = "{\"date_posted\": 1769947792, \"start_hour\": 1669947798, \"end_hour\": 1669947799, \"from\": 10}";
+    public void postTrackWithInvalidMaterial() throws IOException, InterruptedException{
+        String json = "{\"material_from\": 200, \"progress\": 10}";
         HttpRequest request = HttpRequest.newBuilder()
-            .uri(URI.create(host + "/commits"))
+            .uri(URI.create(host + "/tracks"))
             .POST(HttpRequest.BodyPublishers.ofString(json))
             .header("Content-Type", "application/json")
             .build();
         HttpResponse<String> response = webClient.send(request, HttpResponse.BodyHandlers.ofString());
         int status = response.statusCode();
-        Assertions.assertEquals(200, status, "Expected status code 200, actual code is " + status);
-        Track from = new Track(10);
-        Commit expected = new Commit(1, 1769947792L, 1669947798L, 1669947799L, from);
-        Commit result = objectMapper.readValue(response.body().toString(), new TypeReference<Commit>(){});
+        Assertions.assertEquals(400, status, "Expected status code 400, actual code is " + status);
+        String result = response.body();
+        String expected = "";
         Assertions.assertEquals(expected, result, "Expected="+expected + ", Result="+result);
     }
-   
+    @Test
+    public void postTrackWithExistedTrack() throws IOException, InterruptedException{
+        String json = "{\"material_from\": 10, \"progress\": 10}";
+        HttpRequest request = HttpRequest.newBuilder()
+            .uri(URI.create(host + "/tracks"))
+            .POST(HttpRequest.BodyPublishers.ofString(json))
+            .header("Content-Type", "application/json")
+            .build();
+        HttpResponse<String> response = webClient.send(request, HttpResponse.BodyHandlers.ofString());
+        int status = response.statusCode();
+        Assertions.assertEquals(400, status, "Expected status code 400, actual code is " + status);
+        String result = response.body();
+        String expected = "";
+        Assertions.assertEquals(expected, result, "Expected="+expected + ", Result="+result);
+    }
+    
+    
 }

@@ -31,6 +31,9 @@ public class Material {
         this.url = m.url;
         this.note = m.note;
     }
+    public Material(Integer id){
+        this.material_id = id;
+    }
     public Material(Integer id, String name){
         this.material_id = id;
         this.name = name;

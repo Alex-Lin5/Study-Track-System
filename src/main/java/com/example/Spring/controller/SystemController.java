@@ -108,5 +108,32 @@ public class SystemController {
         log.info("Handling get all tracks request." + tracks);
         return ResponseEntity.status(HttpStatus.OK).body(tracks);
     }
+    @PostMapping(value = "/tracks")
+    public ResponseEntity<Track> postTrack(@RequestBody Track t){
+        if(t == null){
+            log.error("Post track with empty input.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+        if(t.getMaterial_from() == null){
+            log.error("Post track with empty material from input.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+        log.info("Handling post track request. " + t);
+        Track track = trackService.postTrack(t);
+        if(track == null){
+            log.error("Post track with unknown error, "+ t);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+        else if(track.getMaterial_from() == null){
+            log.error("Post track with non-existed material from, "+ t.getMaterial_from().getName());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+        else if(!track.getMaterial_from().getMaterial_id().equals(t.getMaterial_from().getMaterial_id())){
+            log.error("Post track duplicate with existed material from, "+ t.getMaterial_from().getName()+ ", track id is "+ track.getTrack_id());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+        log.info("Post track with valid input.");
+        return ResponseEntity.status(HttpStatus.OK).body(track);
+    }
 
 }

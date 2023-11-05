@@ -12,7 +12,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.SpringApplication;
 import org.springframework.context.ApplicationContext;
-import org.springframework.http.HttpStatus;
+// import org.springframework.http.HttpStatus;
 
 import com.example.Spring.StudyTrackSystemApplication;
 import com.example.Spring.entity.Material;
@@ -53,26 +53,10 @@ public class CreateMaterialTest {
         Material result = objectMapper.readValue(response.body().toString(), new TypeReference<Material>(){});
         Assertions.assertEquals(expected, result, "Expected="+expected + ", Result="+result);
     }   
-    @Test
-    public void PostMaterialWithDuplicateId() 
-    throws IOException, InterruptedException {
-        String json = "{\"material_id\":30, \"name\":\"maven\", \"description\":\"project manager\"}";
-        HttpRequest request = HttpRequest.newBuilder()
-            .uri(URI.create(host + "/materials"))
-            .POST(HttpRequest.BodyPublishers.ofString(json))
-            .header("Content-Type", "application/json")
-            .build();
-        HttpResponse<String> response = webClient.send(request, HttpResponse.BodyHandlers.ofString());
-        int status = response.statusCode();
-        Assertions.assertEquals(400, status, "Expected status code 400, actual code is " + status);
-        String expected = "";
-        String result = response.body().toString();
-        Assertions.assertEquals(expected, result, "Expected="+expected + ", Result="+result);
-    }   
     // @Test
-    // public void PostMaterialWithDuplicateName() 
+    // public void PostMaterialWithDuplicateId() 
     // throws IOException, InterruptedException {
-    //     String json = "{\"material_id\":40, \"name\":\"git\", \"description\":\"project manager\"}";
+    //     String json = "{\"material_id\":30, \"name\":\"maven\", \"description\":\"project manager\"}";
     //     HttpRequest request = HttpRequest.newBuilder()
     //         .uri(URI.create(host + "/materials"))
     //         .POST(HttpRequest.BodyPublishers.ofString(json))
@@ -82,8 +66,24 @@ public class CreateMaterialTest {
     //     int status = response.statusCode();
     //     Assertions.assertEquals(400, status, "Expected status code 400, actual code is " + status);
     //     String expected = "";
-    //     String result = response.body();
+    //     String result = response.body().toString();
     //     Assertions.assertEquals(expected, result, "Expected="+expected + ", Result="+result);
     // }   
+    @Test
+    public void PostMaterialWithDuplicateName() 
+    throws IOException, InterruptedException {
+        String json = "{\"material_id\":40, \"name\":\"git\", \"description\":\"project manager\"}";
+        HttpRequest request = HttpRequest.newBuilder()
+            .uri(URI.create(host + "/materials"))
+            .POST(HttpRequest.BodyPublishers.ofString(json))
+            .header("Content-Type", "application/json")
+            .build();
+        HttpResponse<String> response = webClient.send(request, HttpResponse.BodyHandlers.ofString());
+        int status = response.statusCode();
+        Assertions.assertEquals(400, status, "Expected status code 400, actual code is " + status);
+        String expected = "";
+        String result = response.body();
+        Assertions.assertEquals(expected, result, "Expected="+expected + ", Result="+result);
+    }   
 
 }

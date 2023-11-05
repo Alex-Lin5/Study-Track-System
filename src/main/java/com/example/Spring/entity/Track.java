@@ -1,7 +1,5 @@
 package com.example.Spring.entity;
 
-import java.util.List;
-
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -21,9 +19,6 @@ public class Track {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Setter(AccessLevel.NONE)
     private Integer track_id;
-    // @OneToMany(cascade = CascadeType.ALL)
-    // @JoinColumn(name = "commit_id")
-    // private List<Commit> commits;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "material_from")
     private Material material_from;
@@ -31,6 +26,11 @@ public class Track {
     private Integer progress;
 
     public Track(){}
+    public Track(Track t){
+        this.track_id = t.track_id;
+        this.material_from = t.material_from;
+        this.progress = t.progress;
+    }
     public Track(Integer id) {this.track_id = id;}
     public Track(Integer id, Material material, Integer progress){
         this.track_id = id;
@@ -69,8 +69,8 @@ public class Track {
     @Override
     public String toString(){
         return String.format(
-            "Track {track_id=%d, material=%s, progress=%d}\n", 
-            track_id, material_from.getName(), progress);
+            "Track {track_id=%d, material=%d, progress=%d}\n", 
+            track_id, material_from.getMaterial_id(), progress);
     }
 
 }
