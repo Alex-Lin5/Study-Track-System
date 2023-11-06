@@ -42,4 +42,16 @@ public class CommitService {
         }
         return commitRepository.save(c);
     }
+    public Commit deleteCommitById(Integer id){
+        if(id == null) return null;
+        Optional<Commit> existedCommit = commitRepository.findById(id);
+        if(existedCommit.isPresent()){
+            Commit commit = existedCommit.get();
+            commit.setFrom(null);
+            commitRepository.save(commit);
+            commitRepository.deleteById(id);
+            return existedCommit.get();
+        }
+        return null;
+    }
 }

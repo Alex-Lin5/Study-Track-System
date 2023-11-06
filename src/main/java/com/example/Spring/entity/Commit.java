@@ -20,7 +20,7 @@ public class Commit {
     @Setter(AccessLevel.NONE)
     private Integer commit_id;
     @Column(columnDefinition = "varchar(255) default 'None'")
-    private String message;
+    private String message = "None";
     private Long date_posted;
     private Long start_hour;
     private Long end_hour;

@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -39,6 +40,7 @@ public class SystemController {
         log.info("Handling home page get request.");
         return ResponseEntity.status(HttpStatus.OK).body("Home");
     }
+
     @GetMapping(value = "/commits")
     public ResponseEntity<List<Commit>> getAllCommits(){
         List<Commit> commits = commitService.getAllCommits();
@@ -50,6 +52,21 @@ public class SystemController {
         List<Commit> commits = commitService.getCommitsInTrack(track_id);
         log.info("Handling get commits in track request." + commits + ", track_id=" + track_id);
         return ResponseEntity.status(HttpStatus.OK).body(commits);
+    }
+    @DeleteMapping(value = "commits/{commit_id}")
+    public ResponseEntity<Commit> deleteCommitById(@PathVariable Integer commit_id){
+        log.info("Handling delete commit request. ID = " + commit_id);
+        // if(!commit_id.getClass().equals(Integer.class)){
+        //     log.info("Input provided is not an integer.");
+        //     return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        // }
+        Commit commit = commitService.deleteCommitById((Integer) commit_id);
+        if(commit == null){
+            log.error("Commit is not existed in database, ID = "+ commit_id);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+        log.info("Delete commit in success, ID = "+ commit_id);
+        return ResponseEntity.status(HttpStatus.OK).body(commit);
     }
     @PostMapping(value = "/commits")
     public ResponseEntity<Commit> postCommit(@RequestBody Commit c){
@@ -74,6 +91,7 @@ public class SystemController {
         log.info("Post commit with valid track from input.");
         return ResponseEntity.status(HttpStatus.OK).body(commit);
     }
+
     @GetMapping(value = "/materials")
     public ResponseEntity<List<Material>> getAllmaterials(){
         List<Material> materials = materialService.getAllMaterials();
@@ -102,6 +120,7 @@ public class SystemController {
         }
         return ResponseEntity.status(HttpStatus.OK).body(material);
     }
+
     @GetMapping(value = "/tracks")
     public ResponseEntity<List<Track>> getAlltracks(){
         List<Track> tracks = trackService.getAllTracks();
