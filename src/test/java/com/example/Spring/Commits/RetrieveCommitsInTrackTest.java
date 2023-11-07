@@ -43,7 +43,7 @@ public class RetrieveCommitsInTrackTest {
     public void getCommitsInTrackAvailable() throws IOException, InterruptedException {
         Integer track_id = 10;
         HttpRequest request = HttpRequest.newBuilder()
-            .uri(URI.create(host + "/commits" + "/" + track_id.toString()))
+            .uri(URI.create(host + "/commits/" + track_id.toString()))
             .build();
         HttpResponse<String> response = webClient.send(request, HttpResponse.BodyHandlers.ofString());
         int status = response.statusCode();

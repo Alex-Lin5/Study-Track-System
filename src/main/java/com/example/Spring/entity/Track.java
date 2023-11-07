@@ -60,7 +60,9 @@ public class Track {
         }
         if(this.material_from == null){
             if(other.material_from != null) return false;            
-        } else if(!this.material_from.getMaterial_id().equals(other.material_from.getMaterial_id())){
+        } 
+        else if(other.material_from == null) return false;
+        else if(!this.material_from.getMaterial_id().equals(other.material_from.getMaterial_id())){
             return false;
         }
         return true;

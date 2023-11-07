@@ -19,6 +19,8 @@ import com.example.Spring.service.CommitService;
 import com.example.Spring.service.MaterialService;
 import com.example.Spring.service.TrackService;
 
+import jakarta.persistence.criteria.CriteriaBuilder.In;
+import jakarta.websocket.server.PathParam;
 import lombok.extern.log4j.Log4j2;
 
 @RestController
@@ -53,6 +55,7 @@ public class SystemController {
         log.info("Handling get commits in track request." + commits + ", track_id=" + track_id);
         return ResponseEntity.status(HttpStatus.OK).body(commits);
     }
+    // unlink with track then delete single commit
     @DeleteMapping(value = "commits/{commit_id}")
     public ResponseEntity<Commit> deleteCommitById(@PathVariable Integer commit_id){
         log.info("Handling delete commit request. ID = " + commit_id);
@@ -98,6 +101,11 @@ public class SystemController {
         log.info("Handling get all materials request." + materials);
         return ResponseEntity.status(HttpStatus.OK).body(materials);
     }
+    // @GetMapping(value = "/material/{material_id}")
+    // public ResponseEntity<Material> getMaterialById(@PathVariable Integer material_id){
+    //     Material material = materialService.findById(material_id);
+    // }
+    // unlink with track then delete single material
     @DeleteMapping(value = "materials/{material_id}")
     public ResponseEntity<Material> deleteMaterialById(@PathVariable Integer material_id){
         log.info("Handling delete material request. ID = " + material_id);
@@ -137,6 +145,18 @@ public class SystemController {
         List<Track> tracks = trackService.getAllTracks();
         log.info("Handling get all tracks request." + tracks);
         return ResponseEntity.status(HttpStatus.OK).body(tracks);
+    }
+    // unlink with commits and material, then delete single track, commits in this track and binding material
+    @DeleteMapping(value = "tracks/{track_id}")
+    public ResponseEntity<Track> deleteTrackById(@PathVariable Integer track_id){
+        log.info("Handling delete track request. ID = " + track_id);
+        Track track = trackService.deleteTrackById((Integer) track_id);
+        if(track == null){
+            log.error("Track is not existed in database, ID = "+ track_id);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+        log.info("Delete track in success, ID = "+ track_id);
+        return ResponseEntity.status(HttpStatus.OK).body(track);
     }
     @PostMapping(value = "/tracks")
     public ResponseEntity<Track> postTrack(@RequestBody Track t){
