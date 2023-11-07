@@ -98,6 +98,17 @@ public class SystemController {
         log.info("Handling get all materials request." + materials);
         return ResponseEntity.status(HttpStatus.OK).body(materials);
     }
+    @DeleteMapping(value = "materials/{material_id}")
+    public ResponseEntity<Material> deleteMaterialById(@PathVariable Integer material_id){
+        log.info("Handling delete material request. ID = " + material_id);
+        Material material = materialService.deleteMaterialById((Integer) material_id);
+        if(material == null){
+            log.error("Material is not existed in database, ID = "+ material_id);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+        log.info("Delete material in success, ID = "+ material_id);
+        return ResponseEntity.status(HttpStatus.OK).body(material);
+    }
     @PostMapping(value = "/materials")
     public ResponseEntity<Material> postMaterial(@RequestBody Material m){
         log.info("Handling post material request. " + m);

@@ -68,6 +68,11 @@ public class Track {
 
     @Override
     public String toString(){
+        if(material_from == null){
+            return String.format(
+            "Track {track_id=%d, material=null, progress=%d}\n", 
+            track_id, progress);
+        }
         return String.format(
             "Track {track_id=%d, material=%d, progress=%d}\n", 
             track_id, material_from.getMaterial_id(), progress);

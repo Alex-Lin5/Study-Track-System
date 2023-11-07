@@ -95,7 +95,7 @@ public class Commit {
             "Commit {commit_id=%d, message=%s date_posted=%d, start_hour=%d, end_hour=%d, from=%d}\n", 
             commit_id, message, date_posted, start_hour, end_hour, from.getTrack_id());
         return String.format(
-            "Commit {commit_id=%d, message=%s date_posted=%d, start_hour=%d, end_hour=%d}\n", 
+            "Commit {commit_id=%d, message=%s date_posted=%d, start_hour=%d, end_hour=%d, from=null}\n", 
             commit_id, message, date_posted, start_hour, end_hour);
     }
 }
