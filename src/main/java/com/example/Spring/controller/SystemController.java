@@ -7,8 +7,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,8 +21,6 @@ import com.example.Spring.service.CommitService;
 import com.example.Spring.service.MaterialService;
 import com.example.Spring.service.TrackService;
 
-import jakarta.persistence.criteria.CriteriaBuilder.In;
-import jakarta.websocket.server.PathParam;
 import lombok.extern.log4j.Log4j2;
 
 @RestController
@@ -115,6 +115,25 @@ public class SystemController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
         log.info("Delete material in success, ID = "+ material_id);
+        return ResponseEntity.status(HttpStatus.OK).body(material);
+    }
+    @PatchMapping("/materials")
+    // @PutMapping
+    public ResponseEntity<Material> patchMaterial(@RequestBody Material m){
+        log.info("Handling patch material request. " + m);
+        if(m == null){
+            log.error("Patch material with empty input.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+        Material material = materialService.patchMaterial(m);
+        if(material == null){
+            log.error("Patch material with unknown error, "+ m);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+        if(material.getName() == null){
+            log.error("Patch material with unmatched name attribute, "+ m.getName());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
         return ResponseEntity.status(HttpStatus.OK).body(material);
     }
     @PostMapping(value = "/materials")

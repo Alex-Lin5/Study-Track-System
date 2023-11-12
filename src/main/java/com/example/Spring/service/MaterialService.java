@@ -54,4 +54,14 @@ public class MaterialService {
         }
         return null;
     }
+    public Material patchMaterial(Material m){
+        Optional<Material> optionalMaterial = materialRepository.findById(m.getMaterial_id());
+        if(optionalMaterial.isEmpty()) return null;
+        Material material = new Material(m);
+        if(!optionalMaterial.get().getName().equals(m.getName())){
+            material.setName(null);
+            return material;
+        } 
+        return materialRepository.save(material);
+    }
 }
