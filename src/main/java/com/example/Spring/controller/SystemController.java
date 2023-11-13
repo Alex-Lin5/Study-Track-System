@@ -106,7 +106,7 @@ public class SystemController {
     //     Material material = materialService.findById(material_id);
     // }
     // unlink with track then delete single material
-    @DeleteMapping(value = "materials/{material_id}")
+    @DeleteMapping(value = "/materials/{material_id}")
     public ResponseEntity<Material> deleteMaterialById(@PathVariable Integer material_id){
         log.info("Handling delete material request. ID = " + material_id);
         Material material = materialService.deleteMaterialById((Integer) material_id);
@@ -117,8 +117,7 @@ public class SystemController {
         log.info("Delete material in success, ID = "+ material_id);
         return ResponseEntity.status(HttpStatus.OK).body(material);
     }
-    @PatchMapping("/materials")
-    // @PutMapping
+    @PatchMapping(value = "/materials")
     public ResponseEntity<Material> patchMaterial(@RequestBody Material m){
         log.info("Handling patch material request. " + m);
         if(m == null){
@@ -132,6 +131,24 @@ public class SystemController {
         }
         if(material.getName() == null){
             log.error("Patch material with unmatched name attribute, "+ m.getName());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+        return ResponseEntity.status(HttpStatus.OK).body(material);
+    }
+    @PutMapping(value = "/materials")
+    public ResponseEntity<Material> putMaterial(@RequestBody Material m){
+        log.info("Handling put material request. " + m);
+        if(m == null){
+            log.error("Put material with empty input.");
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+        Material material = materialService.putMaterial(m);
+        if(material == null){
+            log.error("Put material with unknown error, "+ m);
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
+        }
+        if(material.getName() == null){
+            log.error("Put material with conflict name attribute in database, "+ m.getName());
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
         return ResponseEntity.status(HttpStatus.OK).body(material);

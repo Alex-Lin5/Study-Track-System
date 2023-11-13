@@ -11,10 +11,10 @@ import com.example.Spring.entity.Track;
 import com.example.Spring.repository.MaterialRepository;
 import com.example.Spring.repository.TrackRepository;
 
-import lombok.extern.log4j.Log4j2;
+// import lombok.extern.log4j.Log4j2;
 
 @Service
-@Log4j2
+// @Log4j2
 public class MaterialService {
     @Autowired
     TrackRepository trackRepository;
@@ -59,6 +59,18 @@ public class MaterialService {
         if(optionalMaterial.isEmpty()) return null;
         Material material = new Material(m);
         if(!optionalMaterial.get().getName().equals(m.getName())){
+            material.setName(null);
+            return material;
+        } 
+        return materialRepository.save(material);
+    }
+    public Material putMaterial(Material m){
+        if(m == null) return null;
+        Optional<Material> optionalMaterial = materialRepository.findById(m.getMaterial_id());
+        Optional<Material> nameMaterial = materialRepository.findByName(m.getName());
+        if(optionalMaterial.isEmpty()) return null;
+        Material material = new Material(m);
+        if(nameMaterial.isPresent()){
             material.setName(null);
             return material;
         } 

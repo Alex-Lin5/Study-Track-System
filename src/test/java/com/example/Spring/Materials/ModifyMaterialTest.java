@@ -6,7 +6,6 @@ import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,7 +18,7 @@ import com.example.Spring.entity.Material;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class UpdateMaterialTest {
+public class ModifyMaterialTest {
     ApplicationContext app;
     HttpClient webClient;
     ObjectMapper objectMapper;
@@ -39,12 +38,12 @@ public class UpdateMaterialTest {
         SpringApplication.exit(app);
     }
     @Test
-    public void patchMaterialSuccessful() throws Exception {
-        String json = "{\"material_id\":30, \"name\":\"git\", \"description\":\"version control\", \"note\":\"learned basic\"}";
-        Material expected = new Material(30, "git", "version control", "undefined", "learned basic");
+    public void putMaterialSuccessful() throws Exception {
+        String json = "{\"material_id\":30, \"name\":\"gitt\", \"description\":\"version control\", \"note\":\"learned basic\"}";
+        Material expected = new Material(30, "gitt", "version control", "undefined", "learned basic");
         HttpRequest request = HttpRequest.newBuilder()
             .uri(URI.create(host + "/materials"))
-            .method("PATCH", HttpRequest.BodyPublishers.ofString(json))
+            .PUT(HttpRequest.BodyPublishers.ofString(json))
             .header("Content-Type", "application/json")
             .build();
         HttpResponse<String> response = webClient.send(request, HttpResponse.BodyHandlers.ofString());
@@ -54,11 +53,11 @@ public class UpdateMaterialTest {
         Assertions.assertEquals(expected, result, "Expected="+expected + ", Result="+result);
     }   
     @Test
-    public void patchMaterialWithInvalidId() throws IOException, InterruptedException {
+    public void putMaterialWithInvalidId() throws IOException, InterruptedException {
         String json = "{\"material_id\":300, \"name\":\"git\", \"description\":\"version control\", \"note\":\"learned basic\"}";
         HttpRequest request = HttpRequest.newBuilder()
             .uri(URI.create(host + "/materials"))
-            .method("PATCH", HttpRequest.BodyPublishers.ofString(json))
+            .PUT(HttpRequest.BodyPublishers.ofString(json))
             .header("Content-Type", "application/json")
             .build();
         HttpResponse<String> response = webClient.send(request, HttpResponse.BodyHandlers.ofString());
@@ -69,11 +68,11 @@ public class UpdateMaterialTest {
         Assertions.assertEquals(expected, result, "Expected="+expected + ", Result="+result);
     }   
     @Test
-    public void patchMaterialWithUnmatchedName() throws IOException, InterruptedException {
-        String json = "{\"material_id\":30, \"name\":\"gitt\", \"description\":\"version control\", \"note\":\"learned basic\"}";
+    public void putMaterialWithConflictName() throws IOException, InterruptedException {
+        String json = "{\"material_id\":30, \"name\":\"spring\", \"description\":\"version control\", \"note\":\"learned basic\"}";
         HttpRequest request = HttpRequest.newBuilder()
             .uri(URI.create(host + "/materials"))
-            .method("PATCH", HttpRequest.BodyPublishers.ofString(json))
+            .PUT(HttpRequest.BodyPublishers.ofString(json))
             .header("Content-Type", "application/json")
             .build();
         HttpResponse<String> response = webClient.send(request, HttpResponse.BodyHandlers.ofString());
