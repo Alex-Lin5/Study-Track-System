@@ -1,5 +1,8 @@
 package com.example.Spring.entity;
 
+import org.springframework.lang.Nullable;
+import org.springframework.util.ObjectUtils;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -28,7 +31,6 @@ public class Commit {
     private Integer point;
     @ManyToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "track_from")
-    // @JoinColumn(name = "from", referencedColumnName = "track_id")
     private Track from;
 
     public Commit(){}
@@ -60,32 +62,15 @@ public class Commit {
         return this.commit_id;
     }
     @Override
-    public boolean equals(Object obj){
+    public boolean equals(@Nullable Object obj){
         if(obj == null) return false;
         if(this == obj) return true;
         if(getClass() != obj.getClass()) return false;
-        Commit other = (Commit) obj;
-        if(this.commit_id == null){
-            if(other.commit_id != null) return false;            
-        } else if(!this.commit_id.equals(other.commit_id)){
-            return false;
-        }
-        if(this.date_posted == null){
-            if(other.date_posted != null) return false;            
-        } else if(!this.date_posted.equals(other.date_posted)){
-            return false;
-        }
-        if(this.start_hour == null){
-            if(other.start_hour != null) return false;            
-        } else if(!this.start_hour.equals(other.start_hour)){
-            return false;
-        }
-        if(this.end_hour == null){
-            if(other.end_hour != null) return false;            
-        } else if(!this.end_hour.equals(other.end_hour)){
-            return false;
-        }
-        return true;
+        Commit that = (Commit) obj;
+        return ObjectUtils.nullSafeEquals(this.commit_id, that.commit_id) &&
+            ObjectUtils.nullSafeEquals(this.date_posted, that.date_posted) &&
+            ObjectUtils.nullSafeEquals(this.start_hour, that.start_hour) &&
+            ObjectUtils.nullSafeEquals(this.end_hour, that.end_hour);
     }
     
     @Override
